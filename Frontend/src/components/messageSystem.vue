@@ -8,35 +8,19 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapMutations } from 'vuex';
 export default {
     name:"messageSystem",
-    props:{
-        //список повідомлень
-        messagesList:Array,
-        //час через який повідомлення зникне
-        delay:Number
-    },
     data(){
         return{
-            messages: this.messagesList,
-            time: (this.delay || 5)*1000           
         }
     },
     computed:{
-        //текст першого повідомлення для показу
-        text(){
-            return this.messages[0];
-        }   
+        ...mapState(['messages']),
+        ...mapGetters(['firstMessage','areSomeMessages','messagesCount'])
     },
     methods:{
-        //закрити перше повідомлення
-        close(){
-            this.messages.shift();
-        }
-    },
-    updated(){        
-        //запланувати закриття повідомлення через вказаний час. Викликається щоразу після оновлення по відомлення    
-        setTimeout(this.close, this.time);
+       ...mapMutations(['removeMessage'])
     }
 }
 </script>

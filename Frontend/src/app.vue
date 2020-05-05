@@ -17,6 +17,7 @@
     import queryForm from "./components/queryForm"
     import messageSystem from "./components/messageSystem";
     import axios from "axios";
+    import { mapActions } from 'vuex';
 
         export default {
         name:"app",
@@ -89,84 +90,7 @@ components: {
   },
   
   methods: {
-      async getPassengers() {
-      try {
-       
-        let resp = await axios.get("http://localhost:5000/passenger");
-       
-        return resp.data;
-      } catch (e) {
-       
-        console.log(e);
-        
-        this.messagesList.push(e);
-      }
-    },
-   
-    async postPassengers(passenger) {
-      try {
-        let resp = await axios.post("http://localhost:5000/passenger", passenger);
-        return resp.data;
-      } catch (e) {
-        console.log(e);
-        this.messagesList.push(e);
-      }
-    },
-    
-    async deletePassenger(passenger) {
-      try {
-        let resp = await axios.delete(`http://localhost:5000/passenger/${passenger._id}`);
-        return resp.data;
-      } catch (e) {
-        console.log(e);
-        this.messagesList.push(e);
-      }
-    },
-   
-    async patchPassenger(passenger) {
-      try {
-        let resp = await axios.patch(
-          `http://localhost:5000/passenger/${passenger._id}`,
-          passenger
-        );
-        return resp.data;
-      } catch (e) {
-        console.log(e);
-        this.messagesList.push(e);
-      }
-    },
-    showNewPassengerForm() {
-      this.passenger = Object.assign(this.passenger, {
-            name: "",
-            destination:"",
-            luggageCount:0,
-            luggageWeight:0
-      });
-      this.formAction = this.addNewPassenger;
-      this.formVisible = true;
-    },
-    addNewPassenger() {
-      let copy = Object.assign({}, this.passenger);
-      this.passengers.push(copy);
-    },
-    removePassenger(index) {
-      this.filtredPassengers.splice(index, 1);
-    },
-    showUpdatePassengerForm(index) {
-      this.selectedIndex = index;
-      Object.assign(this.passenger, this.filtredPassengers[index]);
-      this.formAction = this.updatePassenger;
-      this.formVisible = true;
-    },
-    updatePassenger(index) {
-      Object.assign(this.filtredPassengers[this.selectedIndex], this.passenger);
-      this.selectedIndex = -1;
-    },
-    formInput() {
-      this.formAction();
-      this.formVisible = false;
-    },
-    formAction: function() {}
+       ...mapActions(["showMessageForTime", "getPassengers", "showAddForm"]), 
   }
 };
 </script>
